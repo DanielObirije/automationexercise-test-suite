@@ -1,8 +1,9 @@
 import type { Page } from "@playwright/test";
 import { expect } from "@playwright/test";
-import { UserDetails } from "../tests/helpers/types";
+import type { UserDetails } from "../utils/types";
+import { basePage } from "./basePage";
 
-export class signupPage {
+export class signupPage extends basePage {
   private readonly signupInputName = "[data-qa='signup-name']";
   private readonly signupInputePassword = "[data-qa='signup-name']";
   private readonly signupButton = "[data-qa='signup-button']";
@@ -38,15 +39,24 @@ export class signupPage {
 
   private readonly createAccountButton = "[data-qa='create-account']";
 
-  private readonly accountCreatedTitle = "[data-qa='account-created']";
-  private readonly continueButton = "[data-qa='continue-button']";
+  // private readonly accountCreatedTitle = "[data-qa='account-created']";
+  // private readonly continueButton = "[data-qa='continue-button']";
 
-  constructor(private readonly page: Page) {}
+  // constructor(private readonly page: Page) {}
+  constructor(page: Page) {
+    super(page);
+  }
 
   async validateSignupDetails() {
     await expect(this.page.locator(this.signupInputName)).toBeVisible();
     await expect(this.page.locator(this.signupInputePassword)).toBeVisible();
     await expect(this.page.locator(this.signupButton)).toBeVisible();
+  }
+
+  async validateSignup(name: string, email: string) {
+    await this.page.locator(this.signupInputName).fill(name);
+    await this.page.locator(this.signupInputePassword).fill(email);
+    await this.page.locator(this.signupButton).click();
   }
 
   async validateAccountInformationFormDetails() {
@@ -128,13 +138,5 @@ export class signupPage {
 
     await this.page.locator(this.createAccountButton).click();
     await this.page.waitForURL(/.*account_created/);
-  }
-
-  async verifyAccountCreatedSuccessMessage() {
-    expect(this.page.locator(this.accountCreatedTitle)).toContainText(
-      "Account Created",
-    );
-    this.page.locator(this.continueButton).click();
-    await this.page.waitForURL("https://automationexercise.com");
   }
 }
