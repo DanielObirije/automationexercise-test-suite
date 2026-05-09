@@ -3,7 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {"test": "playwright test"},
+  "scripts": {
+    "test": "playwright test",
+    "test:e2e:headed": "playwright test --headed"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/DanielObirije/automationexercise-test-suite.git"
