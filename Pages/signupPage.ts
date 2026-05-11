@@ -5,7 +5,7 @@ import { basePage } from "./basePage";
 
 export class signupPage extends basePage {
   private readonly signupInputName = "[data-qa='signup-name']";
-  private readonly signupInputePassword = "[data-qa='signup-name']";
+  private readonly signupInputeEmail = "[data-qa='signup-email']";
   private readonly signupButton = "[data-qa='signup-button']";
 
   private readonly titleMrRadio = "#id_gender1";
@@ -49,13 +49,13 @@ export class signupPage extends basePage {
 
   async validateSignupDetails() {
     await expect(this.page.locator(this.signupInputName)).toBeVisible();
-    await expect(this.page.locator(this.signupInputePassword)).toBeVisible();
+    await expect(this.page.locator(this.signupInputeEmail)).toBeVisible();
     await expect(this.page.locator(this.signupButton)).toBeVisible();
   }
 
   async validateSignup(name: string, email: string) {
     await this.page.locator(this.signupInputName).fill(name);
-    await this.page.locator(this.signupInputePassword).fill(email);
+    await this.page.locator(this.signupInputeEmail).fill(email);
     await this.page.locator(this.signupButton).click();
   }
 
@@ -96,11 +96,12 @@ export class signupPage extends basePage {
     if (user.title === "mrs") {
       await this.page.locator(this.titleMrsRadio).check();
     }
+    await expect(this.page.locator(this.nameInput)).toHaveValue(user.name);
 
-    await expect(this.page.locator(this.nameInput)).toContainText(user.name);
     const email = this.page.locator(this.emailInput);
-    await expect(email).toContainText(user.email);
     await expect(email).toBeDisabled();
+    await expect(email).toHaveValue(user.email);
+
     await this.page.locator(this.passwordInput).fill(user.password);
 
     if (user.dob) {
@@ -137,6 +138,5 @@ export class signupPage extends basePage {
     await this.page.locator(this.mobileNumberInput).fill(user.mobileNumber);
 
     await this.page.locator(this.createAccountButton).click();
-    await this.page.waitForURL(/.*account_created/);
   }
 }

@@ -17,6 +17,7 @@ export class basePage {
   private readonly contactUsLink = "a[href='/contact_us']";
   private readonly loggedInUserText = "li:has(.fa-user)";
   private readonly signuploginLink = "a[href='/login']";
+  private readonly homeContainer = "#slider-carousel";
 
   constructor(readonly page: Page) {}
 
@@ -24,91 +25,91 @@ export class basePage {
     await this.page.waitForLoadState("networkidle");
   }
 
-  async create() {
-     await this.page.locator(this.signuploginLink).click()
+  async validateNavigation(
+    elementLocator: string,
+    expectedText: RegExp,
+    expectedUrl?: string,
+  ) {
+    const element = this.page.locator(elementLocator);
+    await expect(element).toBeVisible();
+    await expect(element).toHaveText(expectedText);
+    element.click();
+    await this.page.waitForURL(expectedUrl!);
   }
 
-  // async validateNavigation(
-  //   elementLocator: string,
-  //   expectedText: RegExp,
-  //   expectedUrl?: string,
-  // ) {
-  //   const element = this.page.locator(elementLocator);
-  //   await expect(element).toBeVisible();
-  //   await expect(element).toHaveText(expectedText);
-  //   element.click();
-  //   await this.page.waitForURL(expectedUrl!);
-  // }
+  async verifyAccountCreatedSuccessMessage() {
+    expect(this.page.locator(this.accountCreatedTitle)).toContainText(
+      "Account Created",
+    );
+    this.page.locator(this.continueButton).click();
+  }
 
-  // async verifyAccountCreatedSuccessMessage() {
-  //   expect(this.page.locator(this.accountCreatedTitle)).toContainText(
-  //     "Account Created",
-  //   );
-  //   this.page.locator(this.continueButton).click();
-  //   await this.page.waitForURL("https://automationexercise.com");
-  // }
+  async verifyAccountDeletedMessage() {
+    expect(this.page.locator(this.accountDeletedTitle)).toContainText(
+      "Account Deleted!",
+    );
+    this.page.locator(this.continueButton).click();
+  }
 
-  // async verifyAccountDeletedMessage() {
-  //   expect(this.page.locator(this.accountDeletedTitle)).toContainText(
-  //     "Account Deleted!",
-  //   );
-  //   this.page.locator(this.continueButton).click();
-  //   await this.page.waitForURL("https://automationexercise.com");
-  // }
+  async validateHomeicon() {
+    await this.validateNavigation(this.homeLink, /home/i, "/home/");
+  }
 
-  // async validateHomeicon() {
-  //   await this.validateNavigation(this.homeLink, /home/i, "/home/");
-  // }
+  async validateProdcticon() {
+    await this.validateNavigation(this.productsLink, /products/i, "/products");
+  }
 
-  // async validateProdcticon() {
-  //   await this.validateNavigation(this.productsLink, /products/i, "/products");
-  // }
+  async validateCarticon() {
+    await this.validateNavigation(this.cartLink, /cart/i, "/view_cart");
+  }
 
-  // async validateCarticon() {
-  //   await this.validateNavigation(this.cartLink, /cart/i, "/view_cart");
-  // }
+  async validateLogouticon() {
+    await this.validateNavigation(this.logoutLink, /logout/i, "");
+  }
 
-  // async validateLogouticon() {
-  //   await this.validateNavigation(this.logoutLink, /logout/i, "");
-  // }
+  async validateDeleteIcon() {
+    const element = this.page.locator(this.deleteAccountLink);
+    await expect(element).toBeVisible();
+    element.click();
+  }
 
-  // async validateDeleteIcon() {
-  //   await this.validateNavigation(this.deleteAccountLink, /delete account/, "");
-  // }
+  async validateTestcaseIcon() {
+    await this.validateNavigation(
+      this.testCasesLink,
+      /test cases/i,
+      "test_cases",
+    );
+  }
 
-  // async validateTestcaseIcon() {
-  //   await this.validateNavigation(
-  //     this.testCasesLink,
-  //     /test cases/i,
-  //     "test_cases",
-  //   );
-  // }
+  async validateApiTestIcon() {
+    await this.validateNavigation(
+      this.apiTestingLink,
+      /api testing/i,
+      "api_list",
+    );
+  }
 
-  // async validateApiTestIcon() {
-  //   await this.validateNavigation(
-  //     this.apiTestingLink,
-  //     /api testing/i,
-  //     "api_list",
-  //   );
-  // }
+  async validateContactusIcon() {
+    await this.validateNavigation(
+      this.contactUsLink,
+      /contact us/i,
+      "contact_us",
+    );
+  }
 
-  // async validateContactusIcon() {
-  //   await this.validateNavigation(
-  //     this.contactUsLink,
-  //     /contact us/i,
-  //     "contact_us",
-  //   );
-  // }
+  async validateSignuplogin() {
+    await this.validateNavigation(this.signuploginLink, /login/i, "login");
+  }
 
-  // async validateSignuplogin() {
-  //   await this.validateNavigation(this.signuploginLink, /login/i, "login");
-  // }
+  async validateLoggedInIcon() {
+    await this.validateNavigation(this.loggedInUserText, /contact us/i);
+  }
 
-  // async validateLoggedInIcon() {
-  //   await this.validateNavigation(this.loggedInUserText, /contact us/i);
-  // }
+  async validateVideoIcon() {
+    await this.validateNavigation(this.videoTutorialsLink, /video tutorials/i);
+  }
 
-  // async validateVideoIcon() {
-  //   await this.validateNavigation(this.videoTutorialsLink, /video tutorials/i);
-  // }
+  async validateHomepage() {
+    await expect(this.page.locator(this.homeContainer)).toBeVisible();
+  }
 }

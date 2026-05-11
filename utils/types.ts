@@ -1,7 +1,4 @@
 export type UserDetails = {
-  signupName: string;
-  signupPassword: string;
-
   title?: "mr" | "mrs";
 
   name: string;
